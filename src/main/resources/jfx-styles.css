@@ -1,0 +1,39 @@
+.jfx-combo-box {
+    -jfx-focus-color: -fx-accent-light;
+    -jfx-unfocus-color: -fx-unfocus;
+    -jfx-label-float: true;
+    -fx-text-fill: -fx-content;
+}
+
+.jfx-rippler {
+    -jfx-rippler-fill: -fx-content;
+}
+
+.jfx-check-box {
+    -jfx-checked-color: -fx-accent-light;
+    -fx-text-fill: -fx-content;
+}
+
+.jfx-date-picker,
+.jfx-time-picker {
+    -jfx-default-color: -fx-accent-light;
+    -jfx-overlay: true;
+}
+
+.date-picker-popup,
+.time-picker-popup {
+    -fx-background-color: -fx-material-dark;
+}
+
+.jfx-text-field,
+.jfx-password-field,
+.jfx-text-area {
+    -jfx-focus-color: -fx-accent-light;
+    -jfx-unfocus-color: -fx-unfocus;
+    -jfx-label-float: true;
+    -fx-text-fill: -fx-content;
+}
+
+.jfx-dialog {
+    -fx-background-color: -fx-material;
+}

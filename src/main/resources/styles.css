@@ -1,0 +1,259 @@
+@font-face {
+    font-family: "Roboto";
+    src: url("fonts/RobotoRegular.ttf");
+}
+
+@font-face {
+    font-family: "Roboto Medium";
+    src: url("fonts/RobotoMedium.ttf");
+}
+
+.root {
+    -fx-accent: #00295C;
+    -fx-accent-light: #3379B7;
+    -fx-accent-dark: #001E42;
+    -fx-font-family: "Roboto";
+    -fx-material: #212121;
+    -fx-material-dark: #1B1B1B;
+    -fx-material-light: #424242;
+    -fx-content: #EEEEEE;
+    -fx-content-light: #FAFAFA;
+    -fx-content-dark: #C7C7C7;
+    -fx-background-color: -fx-material-dark;
+    -fx-unfocus: -fx-material-light;
+    -fx-subtle: -fx-material-light;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.label {
+    -fx-font-family: 'Roboto Medium';
+}
+
+.button .text {
+    -fx-font-size: 13;
+}
+
+.scroll-bar {
+    -fx-background-color: -fx-material-dark;
+}
+
+.scroll-bar .thumb{
+    -fx-background-color: -fx-content-dark;
+}
+
+.scroll-bar .increment-button .increment-arrow,
+.scroll-bar .decrement-button .decrement-arrow{
+    -fx-background-color: -fx-content-dark;
+    -fx-border-color: transparent;
+}
+
+.nav-button {
+    -fx-pref-width: 160px;
+    -fx-pref-height: 36px;
+    -fx-padding: 0 0 0 12;
+    -fx-background-color: -fx-material-dark;
+    -fx-alignment: center-left;
+    -fx-font-size: 13px;
+    -fx-text-fill: -fx-content;
+    -fx-graphic-text-gap: 16;
+    -jfx-button-type: FLAT;
+}
+
+.nav-button .ikonli-font-icon {
+    -fx-icon-size: 13px;
+    -fx-icon-color: -fx-content;
+}
+
+#nav-box {
+    -fx-padding: 8;
+    -fx-spacing: 8;
+    -fx-background-color: -fx-material-dark;
+}
+
+#nav-separator {
+    -fx-pref-width: 160px;
+}
+
+.header {
+    -fx-background-color: -fx-accent;
+    -fx-pref-height: 64px;
+    -fx-pref-width: Infinity;
+    -fx-padding: 24px;
+    -fx-alignment: center-left;
+}
+
+.header-text {
+    -fx-font-family: "Roboto Medium";
+    -fx-fill: -fx-content;
+    -fx-font-size: 15px;
+}
+
+.text-input:disabled {
+    -fx-opacity: 1.0;
+}
+
+.pane-background {
+    -fx-padding: 24px;
+    -fx-background-color: -fx-material;
+}
+
+.pane-background-no-top {
+    -fx-padding: 0 24 24 24;
+    -fx-background-color: -fx-material;
+}
+
+.pane-background-no-left {
+    -fx-padding: 24 24 24 0;
+    -fx-background-color: -fx-material;
+}
+
+.card-backing {
+    -fx-padding: 24px;
+    -fx-alignment: top-center;
+    -fx-background-color: -fx-material-dark;
+    -fx-background-radius: 3px;
+}
+
+.grid-content {
+    -fx-hgap: 12px;
+    -fx-vgap: 12px;
+    -fx-padding: 24px;
+}
+
+.grid-sidebar {
+    -fx-hgap: 12px;
+    -fx-vgap: 20px;
+    -fx-padding: 24px;
+}
+
+.text-field-dir {
+    -fx-pref-width: 520px;
+}
+
+.text-field-filter {
+    -fx-pref-width: 80px;
+}
+
+.button-inline {
+    -fx-pref-width: 24px;
+    -fx-pref-height: 24px;
+}
+
+.button-inline .ikonli-font-icon {
+    -fx-icon-color: -fx-content;
+    -fx-icon-size: 13px;
+    -fx-background-radius: 3px;
+}
+
+.floating-button,
+.floating-sub-button {
+    -fx-background-radius: 50px;
+    -fx-background-color: -fx-accent;
+    -fx-pref-height: 50px;
+    -fx-pref-width: 50px;
+    -fx-min-width: -fx-pref-width;
+    -fx-max-width: -fx-pref-width;
+    -fx-min-height: -fx-pref-height;
+    -fx-max-height: -fx-pref-height;
+    -jfx-button-type: RAISED;
+}
+
+.floating-button {
+    -fx-background-color: -fx-accent;
+}
+
+.floating-sub-button {
+    -fx-background-color: -fx-accent-light;
+}
+
+.floating-button .ikonli-font-icon {
+    -fx-icon-size: 20px;
+    -fx-icon-color: -fx-content;
+}
+
+.floating-sub-button .ikonli-font-icon {
+    -fx-icon-size: 20px;
+    -fx-icon-color: -fx-content-light;
+}
+
+.color-subtle {
+    -fx-background-color: -fx-subtle;
+    -fx-text-fill: -fx-content;
+}
+
+.text-normal{
+    -fx-fill: -fx-content;
+}
+
+.node-list {
+    -fx-rotate: 180;
+    -fx-spacing: 12px;
+}
+
+.context-menu {
+    -fx-background-color: -fx-material;
+}
+
+.context-item {
+    -fx-padding: 8px 12px 8px 12px;
+    -fx-font-family: "Roboto";
+    -fx-alignment: center;
+}
+
+.raised-button {
+    -fx-alignment: CENTER;
+    -fx-pref-height: 32;
+    -fx-pref-width: 60;
+    -fx-background-radius: 3;
+    -fx-font-family: "Roboto Medium";
+    -fx-background-color: -fx-accent-light;
+    -fx-text-fill: -fx-content;
+    -jfx-button-type: RAISED;
+}
+
+.circular-button {
+    -fx-alignment: CENTER;
+    -fx-pref-height: 32;
+    -fx-pref-width: 32;
+    -fx-background-radius: 32;
+    -fx-min-width: -fx-pref-width;
+    -fx-max-width: -fx-pref-width;
+    -fx-min-height: -fx-pref-height;
+    -fx-max-height: -fx-pref-height;
+}
+
+.circular-button .ikonli-font-icon {
+    -fx-icon-size: 16px;
+    -fx-icon-color: -fx-content;
+}
+
+.dialog-header {
+    -fx-font-family: "Roboto Medium";
+    -fx-fill: -fx-content;
+    -fx-font-size: 14px;
+}
+
+.dialog-input-container {
+    -fx-spacing: 24px;
+    -fx-alignment: center;
+}
+
+.dialog-layout {
+    -fx-background-color: -fx-material-dark;
+}
+
+#button-settings .ikonli-font-icon {
+    -fx-icon-code: "mdi-key-variant";
+}
+
+#button-add .ikonli-font-icon {
+    -fx-icon-code: "mdi-plus";
+}
+
+/*.date-picker-popup .time-pane{*/
+/*    -fx-background-color:RED;*/
+/*}*/
+
+
+

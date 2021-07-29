@@ -1,0 +1,55 @@
+.table-view {
+    -fx-background-color: -fx-material-dark;
+    -fx-base: -fx-material-dark;
+    -fx-background-insets: 0;
+}
+
+.table-view .table-cell {
+    -fx-text-fill: -fx-content;
+    -fx-background-color: -fx-material-dark;
+    -fx-border-width: 0;
+}
+
+.table-row-cell:selected .table-cell {
+    -fx-text-fill: -fx-content;
+    -fx-background-color: -fx-accent;
+    -fx-border-width: 0;
+}
+
+.table-view,
+.table-view:focused {
+    -fx-padding: 0;
+}
+
+.table-view .column-header,
+.table-view .column-header .filler,
+.table-view .column-header-background .filler {
+    -fx-background-color: -fx-material-dark;
+}
+
+.table-view .column-header .label {
+    -fx-alignment: center-left;
+}
+
+.table-view .table-column {
+    -fx-padding: 0 0 0 10;
+}
+
+.combo-box .list-cell {
+    -fx-text-fill: -fx-content;
+}
+
+.combo-box-popup .table-view {
+    -fx-background-color: -fx-material;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+}
+
+.combo-box-popup .table-view .list-cell {
+    -fx-background-color: -fx-material;
+}
+
+.combo-box-popup .table-view .list-cell:filled:hover {
+    -fx-background-color: -fx-accent;
+}
+

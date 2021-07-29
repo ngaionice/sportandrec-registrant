@@ -17,7 +17,7 @@ Untested on events that cost money.
 ## Requirements to compile source:
 
 - Java 8 (with JavaFX)
-- Roboto fonts from [here](https://fonts.google.com/specimen/Roboto): put them in `resources/fonts`
+- Roboto fonts from [here](https://fonts.google.com/specimen/Roboto): put them in `resources/fonts`; only `RobotoMedium.ttf` and `RobotoRegular.ttf` are required.
 
 ## Possible future functionality:
 

@@ -27,4 +27,4 @@ Untested on events that cost money.
 
 ## Credits:
 
-- icon from [here](https://icon-icons.com/icon/alpha-t-circle/138951)
+- Icon from [here](https://icon-icons.com/icon/alpha-t-circle/138951)

@@ -8,6 +8,7 @@ Untested on events that cost money.
 
 - Automatic scheduling: set the event date and time, put in the URL and your credentials, and it will sign up for you automatically when signups become available.
 - Automatic re-signup: it can sign up for the same event every week, if desired.
+- Sends desktop notifications on successful/failed signups
 
 ## Security:
 
@@ -17,11 +18,10 @@ Untested on events that cost money.
 ## Requirements to compile source:
 
 - Java 8 (with JavaFX)
-- Roboto fonts from [here](https://fonts.google.com/specimen/Roboto): put them in `resources/fonts`; only `RobotoMedium.ttf` and `RobotoRegular.ttf` are required.
+- Roboto fonts from [here](https://fonts.google.com/specimen/Roboto): put them in `resources/fonts`; only `Roboto-Medium.ttf` and `Roboto-Regular.ttf` are required.
 
 ## Possible future functionality:
 
-- Sending desktop notifications on successful/failed signups
 - Integration with Google Calendar to add events on successful signups
 - Automatic startup on PC startup/user login
 

@@ -21,8 +21,8 @@ public class Event {
     public Event() {
         this.name = new SimpleStringProperty(null);
         this.url = new SimpleStringProperty(null);
-        this.nextDate = new SimpleObjectProperty<>(LocalDate.of(1970, 1, 1));
-        this.time = new SimpleObjectProperty<>(LocalTime.MIDNIGHT);
+        this.nextDate = new SimpleObjectProperty<>(LocalDate.now().plusDays(3));
+        this.time = new SimpleObjectProperty<>(LocalTime.now());
         this.recurring = new SimpleBooleanProperty(false);
         this.nextSignupExecuted = new SimpleBooleanProperty(false);
         this.id = UUID.randomUUID();

@@ -3,12 +3,13 @@ package scheduler;
 import javafx.beans.property.StringProperty;
 import model.DataModel;
 import model.Event;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.UUID;
-import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -18,7 +19,7 @@ public class Scheduler {
     DataModel model;
 
     public Scheduler(DataModel model) {
-        this.executor = new ScheduledThreadPoolExecutor(2);
+        this.executor = new ScheduledThreadPoolExecutor(1);
         executor.setRemoveOnCancelPolicy(true);
         this.model = model;
     }
@@ -43,30 +44,27 @@ public class Scheduler {
     }
 
     /**
-     * Schedules a signup task that executes immediately or 2 days - 1 minute before the event time, whichever has a smaller time difference between event time and signup time.
+     * Schedules a signup task that executes immediately or 2 days - 1 minute before the event time, whichever has a smaller time difference between event time and signup time,
+     * and returns the ScheduledFuture object obtained from scheduling the event.
+     * <p>
      * If the event time has passed/is right now, does nothing.
      */
-    public void scheduleSignupTask(Event e) {
+    public ScheduledFuture<?> scheduleSignupTask(Event e) {
         LocalDateTime happeningTime = LocalDateTime.of(e.getNextDate(), e.getTime());
-        if (happeningTime.isBefore(LocalDateTime.now())) return;
+        if (happeningTime.isBefore(LocalDateTime.now())) return null;
         // if signup has already opened, sign up now, else sign up 1 min after registration opens
         SignupTask task = new SignupTask(executor, e, model.usernameProperty(), model.passwordProperty());
-        if (getSignupTime(happeningTime).isBefore(LocalDateTime.now())) executor.execute(task);
-        else {
-            executor.schedule(task, getMinutesFromSignupTime(happeningTime), TimeUnit.MINUTES);
-            System.out.println("scheduled task: " + e.getId());
-        }
+        return executor.schedule(task, getMinutesFromSignupTime(happeningTime), TimeUnit.MINUTES);
     }
 
     /**
-     * Schedules a renewal task that executes right after the event occurs.
+     * Schedules a renewal task that executes right after the event occurs, and returns the ScheduledFuture object obtained from scheduling the event.
      */
-    public void scheduleRenewalTask(Event e) {
+    public ScheduledFuture<?> scheduleRenewalTask(Event e) {
         LocalDateTime happeningTime = LocalDateTime.of(e.getNextDate(), e.getTime());
         long waitingTime = getMinutesFromHappeningTime(happeningTime); // how long until current event occurs
         RenewalTask task = new RenewalTask(executor, e, model.usernameProperty(), model.passwordProperty());
-        if (waitingTime <= 0) executor.execute(task);
-        else executor.schedule(task, waitingTime, TimeUnit.MINUTES);
+        return executor.schedule(task, waitingTime, TimeUnit.MINUTES);
     }
 
     private static class SignupTask implements Runnable {
@@ -78,7 +76,7 @@ public class Scheduler {
         private final ScheduledThreadPoolExecutor executor;
 
         SignupTask(ScheduledThreadPoolExecutor executor, Event e, StringProperty userId, StringProperty password) {
-            r = new Registrant(userId, password, e.getUrl(), e.getNextDate(), e.getTime(), false);
+            r = new Registrant(userId, password, e.getUrl(), e.getNextDate(), e.getTime(), true);
             this.e = e;
             this.userId = userId;
             this.password = password;
@@ -87,14 +85,21 @@ public class Scheduler {
 
         @Override
         public void run() {
-            r.initialize();
-            r.login();
-            r.registerEvent();
-            r.end();
-            e.setNextSignupExecuted(true);
-            if (e.isRecurring()) {
-                LocalDateTime happeningTime = LocalDateTime.of(e.getNextDate(), e.getTime());
-                executor.schedule(new RenewalTask(executor, e, userId, password), Scheduler.getMinutesFromHappeningTime(happeningTime), TimeUnit.MINUTES);
+            try {
+                r.initialize();
+                r.login();
+                r.registerEvent();
+                e.setNextSignupExecuted(true);
+                if (e.isRecurring()) {
+                    LocalDateTime happeningTime = LocalDateTime.of(e.getNextDate(), e.getTime());
+                    executor.schedule(new RenewalTask(executor, e, userId, password), Scheduler.getMinutesFromHappeningTime(happeningTime), TimeUnit.MINUTES);
+                }
+            } catch (NoSuchElementException | TimeoutException e) {
+                DataModel.setLatestMessage("An error occurred while initializing signup.");
+            } catch (SignupException e) {
+                DataModel.setLatestMessage(e.getMessage());
+            } finally {
+                r.end();
             }
         }
     }

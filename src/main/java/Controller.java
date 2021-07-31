@@ -1,3 +1,4 @@
+import com.dustinredmond.fxtrayicon.FXTrayIcon;
 import com.google.gson.*;
 import com.google.gson.stream.JsonWriter;
 import com.jfoenix.controls.JFXDatePicker;
@@ -7,6 +8,7 @@ import javafx.collections.ListChangeListener;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 import model.DataModel;
 import model.Event;
 import model.Serializer;
@@ -71,7 +73,7 @@ public class Controller {
 
     void setupSidebar(TextField nameInput, CheckBox recurringBox, JFXDatePicker datePicker, JFXTimePicker timePicker, TextArea urlInput) {
         timePicker.valueProperty().addListener(((observable, oldValue, newValue) -> { // intercept changes not adhering to format
-            if (newValue.getMinute() % 15 != 0) timePicker.setValue(roundToClosestQuarter(newValue));
+            if (newValue != null && newValue.getMinute() % 15 != 0) timePicker.setValue(roundToClosestQuarter(newValue));
         }));
         m.currentEventProperty().addListener((obs, oldVal, newVal) -> {
             if (oldVal != null) {
@@ -98,6 +100,18 @@ public class Controller {
         });
     }
 
+    void setupDialog(TextField idInput, PasswordField pwdInput) {
+        idInput.textProperty().bindBidirectional(m.usernameProperty());
+        pwdInput.textProperty().bindBidirectional(m.passwordProperty());
+    }
+
+    void setUpTrayIcon(Stage stage, FXTrayIcon trayIcon, MenuItem close, MenuItem show) {
+        close.setOnAction(e -> System.exit(0));
+        show.setOnAction(e -> stage.show());
+        DataModel.latestMessageProperty().addListener(((observable, oldValue, newValue) -> trayIcon.showMessage(newValue)));
+        trayIcon.show();
+    }
+
     void addEvent() {
         m.getEvents().add(new Event());
         m.setCurrentEvent(m.getEvents().get(m.getEvents().size() - 1));
@@ -114,10 +128,8 @@ public class Controller {
                     for (Event e : c.getAddedSubList()) {
                         if (Scheduler.getMinutesFromHappeningTime(LocalDateTime.of(e.getNextDate(), e.getTime())) > 0) {
                             s.scheduleSignupTask(e);
-                            System.out.println("added signup task: " + e.getId());
                         } else if (e.isRecurring() && e.isNextSignupExecuted()) {
                             s.scheduleRenewalTask(e);
-                            System.out.println("added renewal task: " + e.getId());
                         }
                     }
                 } else if (c.wasRemoved()) {
@@ -134,11 +146,6 @@ public class Controller {
         m.addEvent(new Event("b", "url", LocalDate.now(), LocalTime.now(), true, false));
     }
 
-    void setupDialog(TextField idInput, PasswordField pwdInput) {
-        idInput.textProperty().bindBidirectional(m.usernameProperty());
-        pwdInput.textProperty().bindBidirectional(m.passwordProperty());
-    }
-
     /**
      * Re-schedules the signup of the input event using current credentials and event configuration.
      *
@@ -151,9 +158,9 @@ public class Controller {
         unscheduleEvent(e);
 
         if (Scheduler.getMinutesFromHappeningTime(LocalDateTime.of(e.getNextDate(), e.getTime())) > 0) {
-            s.scheduleSignupTask(e);
+            m.setEventTask(e.getId(), s.scheduleSignupTask(e));
         } else if (e.isRecurring() && e.isNextSignupExecuted()) {
-            s.scheduleRenewalTask(e);
+            m.setEventTask(e.getId(), s.scheduleRenewalTask(e));
         }
     }
 

@@ -1,7 +1,9 @@
+import com.dustinredmond.fxtrayicon.FXTrayIcon;
 import com.jfoenix.controls.*;
 import com.jfoenix.effects.JFXDepthManager;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.*;
@@ -20,6 +22,7 @@ public class Presenter {
     StackPane root;
     BorderPane layoutRoot;
     JFXDialog credentialsDialog;
+    FXTrayIcon trayIcon;
     Controller controller;
 
     public Presenter(Stage stage, Scene sc, StackPane root, Controller controller) {
@@ -29,6 +32,11 @@ public class Presenter {
         this.contentRoot = new AnchorPane();
         this.layoutRoot = new BorderPane();
         this.controller = controller;
+
+        // dependent on controller
+        this.credentialsDialog = getCredentialsDialog();
+        this.trayIcon = getTrayIcon();
+
         setup();
     }
 
@@ -39,8 +47,6 @@ public class Presenter {
         header.getChildren().add(headerText);
         header.getStyleClass().add("header");
         headerText.getStyleClass().add("header-text");
-
-        credentialsDialog = getCredentialsDialog();
 
         root.getChildren().add(contentRoot);
         contentRoot.getChildren().add(layoutRoot);
@@ -166,6 +172,21 @@ public class Presenter {
         pwdInput.maxWidthProperty().bind(content.widthProperty().multiply(0.6));
 
         return dialog;
+    }
+
+    private FXTrayIcon getTrayIcon() {
+        FXTrayIcon trayIcon = new FXTrayIcon(stage, getClass().getResource("icon.png"));
+        trayIcon.setTrayIconTooltip("UofT S&R Registrant");
+
+        MenuItem close = new MenuItem("Exit");
+        MenuItem show = new MenuItem("Show");
+
+        trayIcon.addMenuItem(show);
+        trayIcon.addMenuItem(close);
+
+        controller.setUpTrayIcon(stage, trayIcon, close, show);
+
+        return trayIcon;
     }
 
     private void setMaxAnchor(Node node) {

@@ -8,7 +8,9 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ScheduledFuture;
 
 public class DataModel {
@@ -23,6 +25,14 @@ public class DataModel {
         username = new SimpleStringProperty(null);
         password = new SimpleStringProperty(null);
         currentEvent = new SimpleObjectProperty<>(null);
+    }
+
+    public static StringProperty latestMessageProperty() {
+        return EventCompletionNotice.MESSAGE;
+    }
+
+    public static void setLatestMessage(String message) {
+        EventCompletionNotice.MESSAGE.setValue(message);
     }
 
     public void addEvent(Event e) {
@@ -42,7 +52,6 @@ public class DataModel {
      */
     public void setEventTask(UUID eventId, ScheduledFuture<?> task) {
         eventTasks.put(eventId, task);
-        System.out.println("added task");
     }
 
     /**
@@ -50,9 +59,8 @@ public class DataModel {
      */
     public void cancelEventTask(UUID eventId) {
         if (eventTasks.containsKey(eventId)) {
-            eventTasks.get(eventId).cancel(false);
+            eventTasks.get(eventId).cancel(true);
             eventTasks.remove(eventId);
-            System.out.println("cancelled task");
         }
     }
 
@@ -86,5 +94,9 @@ public class DataModel {
 
     public void setCurrentEvent(Event currentEvent) {
         this.currentEvent.set(currentEvent);
+    }
+
+    private static class EventCompletionNotice {
+        static final StringProperty MESSAGE = new SimpleStringProperty(null);
     }
 }

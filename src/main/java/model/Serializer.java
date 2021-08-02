@@ -8,7 +8,6 @@ import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.UUID;
 
 public class Serializer {
 
@@ -30,7 +29,7 @@ public class Serializer {
     public void writeEvents(JsonWriter writer, Gson g, List<Event> events) throws IOException {
         writer.name("events");
         writer.beginArray();
-        for (Event e: events) writer.jsonValue(g.toJson(e));
+        for (Event e : events) writer.jsonValue(g.toJson(e));
         writer.endArray();
     }
 

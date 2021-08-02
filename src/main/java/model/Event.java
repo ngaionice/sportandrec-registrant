@@ -6,7 +6,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.concurrent.ScheduledFuture;
 
 public class Event {
 
@@ -15,7 +14,7 @@ public class Event {
     private final ObjectProperty<LocalDate> nextDate;
     private final ObjectProperty<LocalTime> time;
     private final BooleanProperty recurring;
-    private final BooleanProperty nextSignupExecuted;
+    private final BooleanProperty nextSignupExecuted; // TODO: convert this into a LocalDateTime prop. + add last signed up URL prop. so we can determine whether a re-signup is necessary
     private final String id;
 
     public Event() {
@@ -72,24 +71,24 @@ public class Event {
         return nextDate.get();
     }
 
-    public ObjectProperty<LocalDate> nextDateProperty() {
-        return nextDate;
-    }
-
     public void setNextDate(LocalDate nextDate) {
         this.nextDate.set(nextDate);
+    }
+
+    public ObjectProperty<LocalDate> nextDateProperty() {
+        return nextDate;
     }
 
     public LocalTime getTime() {
         return time.get();
     }
 
-    public ObjectProperty<LocalTime> timeProperty() {
-        return time;
-    }
-
     public void setTime(LocalTime time) {
         this.time.set(time);
+    }
+
+    public ObjectProperty<LocalTime> timeProperty() {
+        return time;
     }
 
     public boolean isRecurring() {

@@ -1,5 +1,4 @@
 import com.dustinredmond.fxtrayicon.FXTrayIcon;
-import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.gson.*;
 import com.google.gson.stream.JsonWriter;
 import com.jfoenix.controls.JFXDatePicker;
@@ -180,11 +179,6 @@ public class Controller {
     void addEvent() {
         m.getEvents().add(new Event());
         m.setCurrentEvent(m.getEvents().get(m.getEvents().size() - 1));
-    }
-
-    private void sendTestEvent() {
-        m.addEvent(new Event("a", "url", LocalDate.now(), LocalTime.now(), true, false));
-        m.addEvent(new Event("b", "url", LocalDate.now(), LocalTime.now(), true, false));
     }
 
     /**

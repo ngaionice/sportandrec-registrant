@@ -107,7 +107,9 @@ public class Registrant {
                 throw new SignupException("Event on " + date + " at " + time + " could not be found.");
             }
 
-            // accept the waiver
+
+            // accept the waiver; waiver often shows after a slight delay
+            Thread.sleep(3000);
             wait.until(ExpectedConditions.elementToBeClickable(By.id("btnAccept"))).click();
 
             // add to cart
@@ -115,10 +117,11 @@ public class Registrant {
 
             // check out
             wait.until(ExpectedConditions.elementToBeClickable(By.id("checkoutButton"))).click();
-        wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id=\"CheckoutModal\"]/div/div[2]/button[2]"))).click();
+//            wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id=\"CheckoutModal\"]/div/div[2]/button[2]"))).click();
+            Thread.sleep(5000);
             // send message saying signup successful
             DataModel.setLatestMessage("Successfully signed up for event on " + date + " at " + time + ".");
-        } catch (NoSuchElementException | TimeoutException e) {
+        } catch (NoSuchElementException | TimeoutException | InterruptedException e) {
             throw new SignupException("An unknown error occurred while signing up for event on " + date + " at " + time + ".");
         }
     }

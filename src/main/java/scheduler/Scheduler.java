@@ -90,6 +90,7 @@ public class Scheduler {
                 r.login();
                 r.registerEvent();
                 e.setNextSignupExecuted(true);
+                DataModel.setLatestSignedUpEvent(e);
                 if (e.isRecurring()) {
                     LocalDateTime happeningTime = LocalDateTime.of(e.getNextDate(), e.getTime());
                     executor.schedule(new RenewalTask(executor, e, userId, password), Scheduler.getMinutesFromHappeningTime(happeningTime), TimeUnit.MINUTES);

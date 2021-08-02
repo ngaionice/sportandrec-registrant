@@ -37,6 +37,7 @@ public class Main extends Application {
         presenter = new Presenter(stage, scene, root, controller);
 
         controller.deserialize();
+        controller.setupEventChangeListener(); // import all the events before adding the listener, so we don't double-schedule
         Runtime.getRuntime().addShutdownHook(new Thread(() -> controller.serialize()));
         this.stage.setOnCloseRequest(t -> stage.hide());
 

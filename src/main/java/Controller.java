@@ -1,4 +1,5 @@
 import com.dustinredmond.fxtrayicon.FXTrayIcon;
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.gson.*;
 import com.google.gson.stream.JsonWriter;
 import com.jfoenix.controls.JFXDatePicker;
@@ -15,6 +16,7 @@ import model.Serializer;
 import scheduler.Scheduler;
 
 import java.io.*;
+import java.security.GeneralSecurityException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -25,11 +27,12 @@ public class Controller {
 
     DataModel m;
     Scheduler s;
+    CalendarController c;
 
     public Controller(Scheduler s, DataModel m) {
         this.m = m;
         this.s = s;
-        setupEventChangeListener();
+        this.c = null;
     }
 
     void setupTableView(TableView<Event> tv, TableColumn<Event, String> nameColumn, TableColumn<Event, String> timeColumn) {
@@ -73,7 +76,8 @@ public class Controller {
 
     void setupSidebar(TextField nameInput, CheckBox recurringBox, JFXDatePicker datePicker, JFXTimePicker timePicker, TextArea urlInput) {
         timePicker.valueProperty().addListener(((observable, oldValue, newValue) -> { // intercept changes not adhering to format
-            if (newValue != null && newValue.getMinute() % 15 != 0) timePicker.setValue(roundToClosestQuarter(newValue));
+            if (newValue != null && newValue.getMinute() % 15 != 0)
+                timePicker.setValue(roundToClosestQuarter(newValue));
         }));
         m.currentEventProperty().addListener((obs, oldVal, newVal) -> {
             if (oldVal != null) {
@@ -108,16 +112,15 @@ public class Controller {
     void setUpTrayIcon(Stage stage, FXTrayIcon trayIcon, MenuItem close, MenuItem show) {
         close.setOnAction(e -> System.exit(0));
         show.setOnAction(e -> stage.show());
-        DataModel.latestMessageProperty().addListener(((observable, oldValue, newValue) -> trayIcon.showMessage(newValue)));
+        DataModel.latestMessageProperty().addListener(((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                trayIcon.showMessage(newValue);
+            }
+        }));
         trayIcon.show();
     }
 
-    void addEvent() {
-        m.getEvents().add(new Event());
-        m.setCurrentEvent(m.getEvents().get(m.getEvents().size() - 1));
-    }
-
-    private void setupEventChangeListener() {
+    void setupEventChangeListener() {
         m.getEvents().addListener((ListChangeListener.Change<? extends Event> c) -> {
             while (c.next()) {
                 if (c.wasUpdated()) {
@@ -139,6 +142,44 @@ public class Controller {
                 }
             }
         });
+
+    }
+
+    void setupCalendarController(Button calendarBtn) {
+        try {
+            c = new CalendarController();
+            calendarBtn.setDisable(true);
+            calendarBtn.setText("Connected to Google Calendar");
+            System.out.println("started up calendar");
+        } catch (GeneralSecurityException | IOException e) {
+            e.printStackTrace();
+            DataModel.setLatestMessage("Failed to connect to Google Calendar.");
+        }
+    }
+
+    void setupLatestSignedUpEventListener() {
+        DataModel.latestSignedUpEventProperty().addListener(((observable, oldValue, newValue) -> {
+            if (c != null && newValue != null) {
+                try {
+                    c.upsertEvent(newValue);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    DataModel.setLatestMessage("Failed to add " + newValue.getName() + " to Google Calendar.");
+                }
+            }
+        }));
+    }
+
+    void autoStartCalendarIfPossible(Button calendarBtn) {
+        if (CalendarController.existsCredentials()) {
+            setupCalendarController(calendarBtn);
+            setupLatestSignedUpEventListener();
+        }
+    }
+
+    void addEvent() {
+        m.getEvents().add(new Event());
+        m.setCurrentEvent(m.getEvents().get(m.getEvents().size() - 1));
     }
 
     private void sendTestEvent() {
@@ -148,7 +189,7 @@ public class Controller {
 
     /**
      * Re-schedules the signup of the input event using current credentials and event configuration.
-     *
+     * <p>
      * If the event in question has not been signed up for yet (determined by the nextSignupExecuted flag),
      * then a SignupTask will be scheduled; else if the event is a recurring event and has been signed up for already,
      * a RenewalTask will be scheduled. If the event has been signed up for, and is not a recurring event, nothing happens.

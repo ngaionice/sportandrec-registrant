@@ -107,23 +107,14 @@
     -fx-icon-color: -fx-content;
 }
 
-.text-normal{
-    -fx-fill: -fx-content;
-}
-
-.node-list {
-    -fx-rotate: 180;
-    -fx-spacing: 12px;
-}
-
-.context-menu {
-    -fx-background-color: -fx-material;
-}
-
-.context-item {
-    -fx-padding: 8px 12px 8px 12px;
-    -fx-font-family: "Roboto";
+.inline-button {
+    -fx-pref-width: 240px;
+    -fx-pref-height: 24px;
+    -fx-background-color: -fx-accent;
     -fx-alignment: center;
+    -fx-font-size: 13px;
+    -fx-text-fill: -fx-content;
+    -jfx-button-type: FLAT;
 }
 
 .raised-button {
@@ -151,6 +142,20 @@
 .circular-button .ikonli-font-icon {
     -fx-icon-size: 16px;
     -fx-icon-color: -fx-content;
+}
+
+.text-normal{
+    -fx-fill: -fx-content;
+}
+
+.context-menu {
+    -fx-background-color: -fx-material;
+}
+
+.context-item {
+    -fx-padding: 8px 12px 8px 12px;
+    -fx-font-family: "Roboto";
+    -fx-alignment: center;
 }
 
 .dialog-header {

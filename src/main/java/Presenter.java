@@ -101,7 +101,10 @@ public class Presenter {
 
         controller.setupTableView(tv, nameColumn, timeColumn);
         controller.setupSidebar(nameInput, recurringBox, datePicker, timePicker, urlInput);
-        addBtn.setOnAction(e -> controller.addEvent());
+        addBtn.setOnAction(e -> {
+            controller.addEvent();
+            tv.getSelectionModel().selectLast();
+        });
 
         sidebarBacking.getChildren().add(sidebarContainer);
         tableViewBacking.getChildren().add(tableViewContainer);
@@ -146,19 +149,26 @@ public class Presenter {
         Text header = new Text("Credentials");
         JFXTextField idInput = new JFXTextField();
         JFXPasswordField pwdInput = new JFXPasswordField();
+        JFXButton googleCalendarBtn = new JFXButton("Connect to Google Calendar");
         VBox inputContainer = new VBox();
 
         idInput.setPromptText("UTORid");
         pwdInput.setPromptText("Password");
-        inputContainer.getChildren().addAll(Arrays.asList(idInput, pwdInput));
+        inputContainer.getChildren().addAll(Arrays.asList(idInput, pwdInput, googleCalendarBtn));
 
         closeBtn.setOnAction(e -> dialog.close());
+        googleCalendarBtn.setOnAction(e -> {
+            controller.setupCalendarController(googleCalendarBtn);
+            controller.setupLatestSignedUpEventListener();
+        });
         controller.setupDialog(idInput, pwdInput);
+        controller.autoStartCalendarIfPossible(googleCalendarBtn);
 
         content.getChildren().add(inputContainer);
 
         header.getStyleClass().add("dialog-header");
         closeBtn.getStyleClass().add("raised-button");
+        googleCalendarBtn.getStyleClass().add("inline-button");
         inputContainer.getStyleClass().add("dialog-input-container");
         layout.getStyleClass().add("dialog-layout");
 

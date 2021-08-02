@@ -39,7 +39,7 @@ public class Serializer {
         @Override
         public Event deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
             JsonObject obj = jsonElement.getAsJsonObject();
-            UUID id = UUID.fromString(obj.get("uuid").getAsString());
+            String id = obj.get("uuid").getAsString();
             String name = obj.get("name").isJsonNull() ? null : obj.get("name").getAsString();
             String url = obj.get("url").isJsonNull() ? null : obj.get("url").getAsString();
             LocalDate date = obj.get("date").isJsonNull() ? null : LocalDate.parse(obj.get("date").getAsString());
@@ -53,7 +53,7 @@ public class Serializer {
         @Override
         public JsonElement serialize(Event event, Type type, JsonSerializationContext jsonSerializationContext) {
             JsonObject obj = new JsonObject();
-            obj.add("uuid", new JsonPrimitive(event.getId().toString()));
+            obj.add("uuid", new JsonPrimitive(event.getId()));
             obj.add("name", event.getName() == null ? null : new JsonPrimitive(event.getName()));
             obj.add("url", event.getUrl() == null ? null : new JsonPrimitive(event.getUrl()));
             obj.add("date", event.getNextDate() == null ? null : new JsonPrimitive(event.getNextDate().toString()));

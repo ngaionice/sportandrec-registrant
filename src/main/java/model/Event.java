@@ -16,7 +16,7 @@ public class Event {
     private final ObjectProperty<LocalTime> time;
     private final BooleanProperty recurring;
     private final BooleanProperty nextSignupExecuted;
-    private final UUID id;
+    private final String id;
 
     public Event() {
         this.name = new SimpleStringProperty(null);
@@ -25,7 +25,7 @@ public class Event {
         this.time = new SimpleObjectProperty<>(LocalTime.now());
         this.recurring = new SimpleBooleanProperty(false);
         this.nextSignupExecuted = new SimpleBooleanProperty(false);
-        this.id = UUID.randomUUID();
+        this.id = UUID.randomUUID().toString().replace("-", "");
     }
 
     public Event(String name, String url, LocalDate nextDate, LocalTime time, boolean recurring, boolean nextSignupExecuted) {
@@ -35,10 +35,10 @@ public class Event {
         this.time = new SimpleObjectProperty<>(time);
         this.recurring = new SimpleBooleanProperty(recurring);
         this.nextSignupExecuted = new SimpleBooleanProperty(nextSignupExecuted);
-        this.id = UUID.randomUUID();
+        this.id = UUID.randomUUID().toString().replace("-", "");
     }
 
-    public Event(String name, String url, LocalDate nextDate, LocalTime time, boolean recurring, boolean nextSignupExecuted, UUID id) {
+    public Event(String name, String url, LocalDate nextDate, LocalTime time, boolean recurring, boolean nextSignupExecuted, String id) {
         this.name = new SimpleStringProperty(name);
         this.url = new SimpleStringProperty(url);
         this.nextDate = new SimpleObjectProperty<>(nextDate);
@@ -48,7 +48,7 @@ public class Event {
         this.id = id;
     }
 
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 

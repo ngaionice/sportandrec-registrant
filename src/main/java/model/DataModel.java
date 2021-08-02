@@ -16,7 +16,7 @@ import java.util.concurrent.ScheduledFuture;
 public class DataModel {
 
     private final ObservableList<Event> events = FXCollections.observableArrayList(e -> new Observable[]{e.urlProperty(), e.nextDateProperty(), e.timeProperty(), e.recurringProperty()});
-    private final Map<UUID, ScheduledFuture<?>> eventTasks = new HashMap<>();
+    private final Map<String, ScheduledFuture<?>> eventTasks = new HashMap<>();
     private final ObjectProperty<Event> currentEvent;
     private final StringProperty username;
     private final StringProperty password;
@@ -35,6 +35,14 @@ public class DataModel {
         EventCompletionNotice.MESSAGE.setValue(message);
     }
 
+    public static ObjectProperty<Event> latestSignedUpEventProperty() {
+        return EventCompletionNotice.EVENT;
+    }
+
+    public static void setLatestSignedUpEvent(Event e) {
+        EventCompletionNotice.EVENT.setValue(e);
+    }
+
     public void addEvent(Event e) {
         events.add(e);
     }
@@ -50,14 +58,14 @@ public class DataModel {
     /**
      * Associates a task with an Event, so that it can be cancelled if necessary.
      */
-    public void setEventTask(UUID eventId, ScheduledFuture<?> task) {
+    public void setEventTask(String eventId, ScheduledFuture<?> task) {
         eventTasks.put(eventId, task);
     }
 
     /**
-     * Cancels the task associated with the specified event. Cannot cancel if the task is running.
+     * Cancels the task associated with the specified event.
      */
-    public void cancelEventTask(UUID eventId) {
+    public void cancelEventTask(String eventId) {
         if (eventTasks.containsKey(eventId)) {
             eventTasks.get(eventId).cancel(true);
             eventTasks.remove(eventId);
@@ -97,6 +105,7 @@ public class DataModel {
     }
 
     private static class EventCompletionNotice {
-        static final StringProperty MESSAGE = new SimpleStringProperty(null);
+        private static final StringProperty MESSAGE = new SimpleStringProperty(null);
+        private static final ObjectProperty<Event> EVENT = new SimpleObjectProperty<>(null);
     }
 }
